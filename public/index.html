@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Team Sponsorship Directory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Layout: one working column. House header strip, a toolbar, then a ledger: one row per team with its latest patch on the left and a season-by-season timeline on the right. */
+:root{
+  --bg:#f5f6f8;
+  --surface:#ffffff;
+  --ink:#131313;
+  --muted:#5f6670;
+  --line:#e3e6ec;
+  --gap:#eef0f3;
+  --blue:#0d48e5;
+  --blue-ink:#0b3cc1;
+  --blue-soft:#e8f0fe;
+  --cur-bg:#0d48e5;
+  --cur-ink:#ffffff;
+  --new-bg:#fdf3d6;
+  --new-line:#c79100;
+  --new-ink:#7a5400;
+  --past-a:#d9dde4;
+  --past-b:#c6ccd5;
+  --past-ink:#343a42;
+  --good:#17784a;
+  --good-soft:#e2f3ea;
+  --bad:#b3261e;
+  --bad-soft:#fbe9e7;
+  --font-body:"Roboto",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --font-cond:"Roboto Condensed","Arial Narrow",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1216;--surface:#171b21;--ink:#e7e9ec;--muted:#a2a9b3;--line:#2a3039;--gap:#1e232a;
+    --blue:#7aa2ff;--blue-ink:#a3bfff;--blue-soft:#18233d;--cur-bg:#3a68e8;--cur-ink:#ffffff;
+    --new-bg:#2c2412;--new-line:#c79a2e;--new-ink:#f0c766;--past-a:#323844;--past-b:#3d4451;--past-ink:#dde1e6;
+    --good:#5cc995;--good-soft:#123024;--bad:#ff8a80;--bad-soft:#3a1714;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1216;--surface:#171b21;--ink:#e7e9ec;--muted:#a2a9b3;--line:#2a3039;--gap:#1e232a;
+  --blue:#7aa2ff;--blue-ink:#a3bfff;--blue-soft:#18233d;--cur-bg:#3a68e8;--cur-ink:#ffffff;
+  --new-bg:#2c2412;--new-line:#c79a2e;--new-ink:#f0c766;--past-a:#323844;--past-b:#3d4451;--past-ink:#dde1e6;
+  --good:#5cc995;--good-soft:#123024;--bad:#ff8a80;--bad-soft:#3a1714;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.5 var(--font-body);-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:18px 56px}
+.runhead{display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--line);font:700 11px/1.2 var(--font-body);letter-spacing:.09em;text-transform:uppercase;color:var(--blue)}
+.runhead span:last-child{color:var(--muted);font-weight:500}
+h1{font:700 28px/1.15 var(--font-body);margin:18px 0 4px;text-wrap:balance}
+.sub{color:var(--blue);font-weight:700;font-size:15px}
+.statusline{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:8px;font-size:13px;color:var(--muted)}
+.statusline b{color:var(--ink);font-weight:500}
+.tabs{display:flex;gap:4px;margin-top:18px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{appearance:none;background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px 9px;font:500 14px var(--font-body);color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.panel{padding-top:18px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 260px;min-width:0;display:flex}
+.search input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:400 14px var(--font-body)}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:400 14px var(--font-body)}
+.seg-ctl{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg-ctl button{appearance:none;border:0;background:var(--surface);color:var(--muted);padding:8px 12px;font:500 13px var(--font-body);cursor:pointer}
+.seg-ctl button+button{border-left:1px solid var(--line)}
+.seg-ctl button[aria-pressed="true"]{background:var(--blue-soft);color:var(--blue-ink)}
+.btn{appearance:none;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:500 13px var(--font-body);cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.callout{margin-top:16px;padding:14px 16px;border-radius:6px;background:var(--new-bg)}
+.callout.blue{background:var(--blue-soft)}
+.label{font:700 11px/1.3 var(--font-body);letter-spacing:.09em;text-transform:uppercase;color:var(--new-ink)}
+.callout.blue .label{color:var(--blue-ink)}
+.changes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 24px;margin:10px 0 0;padding:0;list-style:none}
+.changes li{min-width:0}
+.linkish{appearance:none;background:none;border:0;padding:0;font:700 14px var(--font-body);color:var(--ink);cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--new-line);text-underline-offset:3px}
+.changes .meta{color:var(--muted);font-size:13px}
+.arrow{color:var(--new-ink);font-weight:700}
+.nosponsor{margin-top:10px;font-size:13px;color:var(--ink)}
+.nosponsor b{font-weight:700}
+.league-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:26px 0 8px}
+.league-head h2{margin:0;font:700 22px/1.1 var(--font-cond);letter-spacing:.02em}
+.league-head span{color:var(--muted);font-size:13px}
+.ledger{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.axis,.row-head{display:grid;grid-template-columns:minmax(210px,270px) minmax(0,1fr);gap:16px;align-items:center}
+.axis{padding:10px 16px 8px;border-bottom:1px solid var(--line);font:500 11px/1 var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tl{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:3px;min-width:0}
+.tl>*{grid-row:1}
+.axis .tl span{text-align:center;font:500 12px/1 var(--font-cond);letter-spacing:.02em;text-transform:none;font-variant-numeric:tabular-nums}
+.row+.row{border-top:1px solid var(--line)}
+.row-head{width:100%;appearance:none;background:none;border:0;padding:12px 16px;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.row-head:hover{background:var(--gap)}
+.row-head[aria-expanded="true"]{background:var(--blue-soft)}
+.team-col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.team-name{font:700 15px/1.2 var(--font-body);display:flex;align-items:center;gap:8px}
+.team-name .caret{display:inline-block;width:8px;color:var(--muted);transition:transform .15s}
+.row-head[aria-expanded="true"] .caret{transform:rotate(90deg)}
+.latest{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:12.5px;color:var(--muted)}
+.none{font-size:12.5px;color:var(--bad);font-weight:500}
+.cell{height:30px;border-radius:4px;background:var(--gap)}
+.seg{display:flex;align-items:center;min-width:0;height:30px;padding:0 8px;border-radius:4px;font:700 11.5px/1 var(--font-cond);letter-spacing:.03em;text-transform:uppercase;overflow:hidden}
+.seg>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg-cur{background:var(--cur-bg);color:var(--cur-ink)}
+.seg-new{background:var(--new-bg);color:var(--new-ink);border:1.5px dashed var(--new-line)}
+.seg-past-a{background:var(--past-a);color:var(--past-ink)}
+.seg-past-b{background:var(--past-b);color:var(--past-ink)}
+.seg-hit{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)}
+.patch{display:inline-flex;align-items:center;min-height:26px;padding:6px 11px;border:1px solid var(--line);border-radius:4px;outline:1px dashed var(--muted);outline-offset:-4px;background:var(--surface);color:var(--ink);font:700 11.5px/1.1 var(--font-cond);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.patch.cur{border-color:var(--cur-bg);outline-color:var(--cur-bg)}
+.patch.new{border-color:var(--new-line);outline-color:var(--new-line);background:var(--new-bg);color:var(--new-ink)}
+.detail{padding:4px 16px 12px;background:var(--bg);border-top:1px solid var(--line)}
+.deal{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px 18px;padding:14px 0}
+.deal+.deal{border-top:1px solid var(--line)}
+.deal .patch{justify-self:start;white-space:normal}
+.deal-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.deal-top h4{margin:0;font:700 16px/1.25 var(--font-body)}
+.deal-seasons{font:500 13px var(--font-cond);letter-spacing:.02em;color:var(--muted);font-variant-numeric:tabular-nums}
+.deal-asset{margin:4px 0 0;color:var(--muted);font-size:13px}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px 18px;margin:10px 0 0}
+.facts div{min-width:0}
+.facts dt{font:700 10.5px/1.3 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:2px 0 0;font-size:13px;overflow-wrap:anywhere}
+.notes{margin:10px 0 0;max-width:80ch;font-size:13px;color:var(--muted)}
+.sources{display:flex;flex-wrap:wrap;gap:4px 12px;margin:10px 0 0;font-size:13px}
+.sources>span{font:700 10.5px/1.9 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sources a{overflow-wrap:anywhere}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font:700 11px/1.5 var(--font-body);letter-spacing:.02em;white-space:nowrap}
+.pill-cur{background:var(--blue-soft);color:var(--blue-ink)}
+.pill-new{background:var(--new-bg);color:var(--new-ink)}
+.pill-past{background:var(--gap);color:var(--muted)}
+.pill-high{background:var(--good-soft);color:var(--good)}
+.pill-med{background:var(--new-bg);color:var(--new-ink)}
+.pill-low{background:var(--bad-soft);color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:22px;height:12px;border-radius:3px;display:inline-block}
+.sw.cur{background:var(--cur-bg)}
+.sw.new{background:var(--new-bg);border:1.5px dashed var(--new-line)}
+.sw.past{background:var(--past-a)}
+.sw.gap{background:var(--gap);border:1px solid var(--line)}
+.table-wrap{margin-top:16px;overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}
+th{background:var(--cur-bg);color:var(--cur-ink);text-align:left;font:700 12px var(--font-body);padding:9px 10px;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:700}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{margin-top:18px;padding:28px 20px;border:1px dashed var(--line);border-radius:8px;background:var(--surface);color:var(--muted);text-align:center}
+.empty strong{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.muted{color:var(--muted)}
+.about{display:grid;gap:16px;max-width:80ch}
+.about h3{margin:6px 0 0;font:700 16px var(--font-body)}
+.about p,.about ul{margin:0}
+.about ul{padding-left:20px;display:grid;gap:4px}
+@media (max-width:760px){
+  .axis,.row-head{grid-template-columns:minmax(0,1fr);gap:10px}
+  .axis .team-col{display:none}
+  .deal{grid-template-columns:minmax(0,1fr)}
+  .seg{padding:0 4px;font-size:10.5px}
+  .axis .tl span{font-size:10.5px}
+  h1{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){.team-name .caret{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="runhead"><span>Zoomph · Sponsorship Directory · Working tool</span><span>Internal</span></div>
+  <h1>Team Sponsorship Directory</h1>
+  <div class="sub" id="sub">Jersey and helmet sponsors, past, present and announced</div>
+  <div class="statusline" id="status"><span>Loading…</span></div>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" id="tab-directory" aria-selected="true" aria-controls="panel-directory" data-tab="directory">Directory</button>
+    <button class="tab" role="tab" id="tab-about" aria-selected="false" aria-controls="panel-about" data-tab="about">How it works</button>
+  </nav>
+
+  <section class="panel" id="panel-directory" role="tabpanel" aria-labelledby="tab-directory">
+    <div class="toolbar">
+      <label class="search" for="q"><input id="q" type="search" placeholder="Search a team or sponsor, e.g. Robinhood" autocomplete="off" aria-label="Search a team or sponsor"></label>
+      <select id="league" aria-label="League"><option value="all">All leagues</option></select>
+      <select id="asset" aria-label="Asset type"><option value="all">All asset types</option></select>
+      <div class="seg-ctl" role="group" aria-label="View">
+        <button type="button" id="view-timeline" aria-pressed="true" data-view="timeline">Timeline</button>
+        <button type="button" id="view-table" aria-pressed="false" data-view="table">Table</button>
+      </div>
+      <button type="button" class="btn" id="download">Download CSV</button>
+    </div>
+    <div id="download-msg" class="muted" role="status" aria-live="polite"></div>
+    <div id="changes"></div>
+    <div id="results"></div>
+    <div class="legend" id="legend" hidden>
+      <span><i class="sw cur"></i>Current sponsor</span>
+      <span><i class="sw new"></i>Announced, not yet worn</span>
+      <span><i class="sw past"></i>Past sponsor</span>
+      <span><i class="sw gap"></i>No sponsor that season</span>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-about" role="tabpanel" aria-labelledby="tab-about" hidden>
+    <div class="about">
+      <div class="callout">
+        <div class="label">Basis</div>
+        <p style="margin:6px 0 0">Every entry comes from public announcements and press coverage, with links to the sources. Reported deal values and terms are the figures the cited outlet published. They are not Zoomph valuations and have not been verified, so cite the outlet if you repeat one.</p>
+      </div>
+      <h3>What's in it</h3>
+      <p id="about-scope">Game jersey sponsors for the NBA (from the start of the patch program in 2017-18), the NBA G League (from 2023-24) and the NHL (from the start of its patch program in 2022-23), through the current or next announced season. NHL helmet decal sponsors are listed from 2025-26 as a separate section, NHL (Helmet Decal). Many NHL teams have different home and road helmet sponsors; the road one is listed as a secondary helmet decal. A decal that started before 2025-26 keeps its real start season where a source gave it. The WNBA is next. G League coverage online is thin, so more G League entries are medium or low confidence, and "No jersey sponsor found" means none could be confirmed, not that the team definitely has none. Where a team carries two jersey sponsors at once (common in the NHL, which often has different home and road patches), the second is listed as a secondary jersey patch. The NHL season was already under way when the NHL was added, so a new 2026-27 NHL patch shows as current and "New for 2026-27" rather than "Announced, not yet worn". The directory is built to hold any sponsorship type (practice jerseys, helmets, naming rights and so on) and more leagues will be added.</p>
+      <h3>Status</h3>
+      <ul>
+        <li><b>Current</b>: the sponsor on the team's jerseys or helmets now, or continuing into the next season.</li>
+        <li><b>Announced, not yet worn</b>: a deal that has been announced but hasn't appeared in a game yet.</li>
+        <li><b>Past</b>: the deal has ended. The seasons it ran are kept so the history stays complete.</li>
+      </ul>
+      <h3>Confidence</h3>
+      <ul>
+        <li><b>High</b>: an official team or league release, or two reputable outlets agree.</li>
+        <li><b>Medium</b>: one reputable outlet, or one detail (usually the end season) is inferred. The notes say which.</li>
+        <li><b>Low</b>: sources are unclear or conflict. Check the notes before relying on it.</li>
+      </ul>
+      <h3>How it stays current</h3>
+      <p>Once a day Claude checks sports business news for new jersey patch and NHL helmet decal announcements. Each one it finds becomes a proposed change, with sources, and Andrew approves or rejects each one. Approved changes are then published to this site, so the site can be a day or two behind an announcement. The "Data as of" date at the top says when it was last updated. The check only reads public news. It never changes anything in the Zoomph platform.</p>
+      <h3>Corrections</h3>
+      <p>If something here is wrong or missing, tell Andrew Ciampini with a link to the source.</p>
+    </div>
+  </section>
+
+  <div class="foot"><span>zoomph.com · Internal</span><span id="foot-count"></span></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* The data is a snapshot exported from the master copy on claude.ai, where the daily news check's proposals are reviewed. */
+  var DATA_URL = "deals.json";
+
+  var S = {
+    deals: new Map(), meta: null, exportedAt: "",
+    q: "", league: "all", asset: "all", view: "timeline", tab: "directory",
+    open: new Set(), phase: "loading"
+  };
+
+  function $(s){ return document.querySelector(s); }
+  function esc(v){ return String(v == null ? "" : v).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function yr(s){ var m = /^(\d{4})/.exec(s || ""); return m ? +m[1] : null; }
+  function isSplit(s){ return /^\d{4}-\d{2}$/.test(s || ""); }
+  function seasonName(y, split){ return split ? y + "-" + String((y + 1) % 100).padStart(2, "0") : String(y); }
+  function shortSeason(y, split){ return split ? String(y % 100).padStart(2, "0") + "-" + String((y + 1) % 100).padStart(2, "0") : "'" + String(y % 100).padStart(2, "0"); }
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function fmtDate(d){ var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ""); return m ? MON[+m[2] - 1] + " " + (+m[3]) + ", " + m[1] : (d || ""); }
+  function fmtTime(iso){ if (/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return fmtDate(iso); var t = new Date(iso); if (!iso || isNaN(t)) return ""; return t.toLocaleString(undefined, {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"}); }
+  var LEAGUE_ORDER = ["NBA", "WNBA", "G League", "NHL (Jersey Patch)", "NHL (Helmet Decal)", "NHL"];
+  /* Leagues shown as one section per asset family, in the league dropdown and the ledger: "NHL (Jersey Patch)" and "NHL (Helmet Decal)". Other leagues are one section each. */
+  var SPLIT_BY_ASSET = {"NHL": true};
+  /* First season each section's history covers; earlier deal starts are clamped on the timeline. */
+  var AXIS_MIN = {"G League": 2023, "NHL (Helmet Decal)": 2025};
+  function leagueSort(a, b){ var x = LEAGUE_ORDER.indexOf(a), y = LEAGUE_ORDER.indexOf(b); if (x < 0) x = 99; if (y < 0) y = 99; return x - y || a.localeCompare(b); }
+  /* "Secondary helmet decal" belongs with "Helmet decal", as "Secondary jersey patch" does with "Jersey patch". */
+  function baseAsset(a){ return String(a || "Jersey patch").replace(/^Secondary /i, "").toLowerCase(); }
+  function assetFamily(a){ return baseAsset(a).replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
+  function sectionOf(d){ var L = d.league || "Other"; return SPLIT_BY_ASSET[L] ? L + " (" + assetFamily(d.asset_type) + ")" : L; }
+  function primaryAsset(section){ var m = /\(([^)]+)\)$/.exec(section); return m ? m[1].charAt(0) + m[1].slice(1).toLowerCase() : "Jersey patch"; }
+  function noneLabel(asset){ var b = baseAsset(asset); return b === "jersey patch" ? "No jersey sponsor found" : "No " + b + " sponsor found"; }
+  function isReal(d){ return d.status !== "None"; }
+  function host(u){ try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return "link"; } }
+  function safeUrl(u){ try { var x = new URL(u); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : null; } catch (e) { return null; } }
+  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
+  function byStart(a, b){ return (yr(a.start_season) || 0) - (yr(b.start_season) || 0); }
+
+  function seasons(d){
+    if (!d.start_season) return "";
+    if (d.status === "Upcoming" && !d.end_season) return "From " + d.start_season;
+    if (!d.end_season) return d.start_season + " to present";
+    if (d.end_season === d.start_season) return d.start_season;
+    return d.start_season + " to " + d.end_season;
+  }
+  function statusPill(s){
+    if (s === "Current") return '<span class="pill pill-cur">Current</span>';
+    if (s === "Upcoming") return '<span class="pill pill-new">Announced, not yet worn</span>';
+    if (s === "Past") return '<span class="pill pill-past">Past</span>';
+    if (s === "None") return '<span class="pill pill-past">No sponsor found</span>';
+    return s ? '<span class="pill pill-past">' + esc(s) + "</span>" : "";
+  }
+  function confPill(c){
+    var k = String(c || "").toLowerCase();
+    var cls = k === "high" ? "pill-high" : k === "medium" ? "pill-med" : k === "low" ? "pill-low" : "pill-past";
+    return c ? '<span class="pill ' + cls + '">' + esc(c) + " confidence</span>" : "";
+  }
+  function shortName(s){ var t = String(s || "").replace(/\s*\([^)]*\)\s*$/, ""); return t || String(s || ""); }
+  function chip(d){
+    var cls = d.status === "Current" ? " cur" : d.status === "Upcoming" ? " new" : "";
+    return '<span class="patch' + cls + '" title="' + esc(d.sponsor) + '">' + esc(shortName(d.sponsor)) + "</span>";
+  }
+
+  /* ---------- grouping ---------- */
+  function visibleDeals(){
+    var out = [];
+    S.deals.forEach(function(d){
+      if (S.league !== "all" && sectionOf(d) !== S.league) return;
+      if (S.asset !== "all" && d.asset_type !== S.asset) return;
+      out.push(d);
+    });
+    return out;
+  }
+  function axisFor(league){
+    var min = Infinity, max = -Infinity, split = true;
+    S.deals.forEach(function(d){
+      if (sectionOf(d) !== league) return;
+      [d.start_season, d.end_season].forEach(function(s){
+        var y = yr(s); if (y == null) return;
+        if (y < min) min = y; if (y > max) max = y;
+        if (!isSplit(s)) split = false;
+      });
+    });
+    if (!isFinite(min)) { min = max = new Date().getFullYear(); }
+    if (AXIS_MIN[league] && min < AXIS_MIN[league]) min = Math.min(AXIS_MIN[league], max);
+    var years = []; for (var y = min; y <= max; y++) years.push(y);
+    return {min: min, max: max, split: split, years: years, last: seasonName(max, split)};
+  }
+  function buildGroups(list){
+    var leagues = new Map();
+    list.forEach(function(d){
+      var L = sectionOf(d);
+      if (!leagues.has(L)) leagues.set(L, new Map());
+      var key = L + "|" + (d.team || "") + "|" + (d.asset_type || "");
+      var rows = leagues.get(L);
+      if (!rows.has(key)) rows.set(key, {key: key, league: L, team: d.team || "", asset: d.asset_type || "", former: "", deals: []});
+      rows.get(key).deals.push(d);
+      if (d.team_former && !rows.get(key).former) rows.get(key).former = d.team_former;
+    });
+    var out = [];
+    Array.from(leagues.keys()).sort(leagueSort).forEach(function(L){
+      var rows = Array.from(leagues.get(L).values()).sort(function(a, b){ return a.team.localeCompare(b.team) || a.asset.localeCompare(b.asset); });
+      rows.forEach(function(r){
+        r.placeholder = r.deals.filter(function(d){ return !isReal(d); });
+        r.deals = r.deals.filter(isReal).sort(byStart);
+      });
+      out.push({league: L, axis: axisFor(L), rows: rows, primary: primaryAsset(L)});
+    });
+    return out;
+  }
+  function rowState(r){
+    var up = null, cur = null, past = null;
+    r.deals.forEach(function(d){
+      if (d.status === "Upcoming" && (!up || byStart(d, up) > 0)) up = d;
+      if (d.status === "Current" && (!cur || byStart(d, cur) > 0)) cur = d;
+      if (d.status === "Past" && (!past || (yr(d.end_season) || 0) > (yr(past.end_season) || 0))) past = d;
+    });
+    return {up: up, cur: cur, past: past};
+  }
+  function searchHits(r){
+    var q = S.q.trim().toLowerCase();
+    var hits = new Set();
+    if (!q) return {show: true, hits: hits};
+    var teamHit = r.team.toLowerCase().indexOf(q) >= 0 || (r.former || "").toLowerCase().indexOf(q) >= 0;
+    r.deals.forEach(function(d){ if ((d.sponsor || "").toLowerCase().indexOf(q) >= 0) hits.add(d._id); });
+    return {show: teamHit || hits.size > 0, hits: hits};
+  }
+  function rowId(key){ return "row-" + slug(key); }
+  /* The deal in the same row that came before d (for "replaces ..."). */
+  function priorDeal(r, d){ var p = null; r.deals.forEach(function(x){ if (x !== d && byStart(x, d) < 0 && (!p || byStart(x, p) > 0)) p = x; }); return p; }
+
+  /* ---------- directory rendering ---------- */
+  function timeline(r, axis, hits){
+    var n = axis.years.length, html = "", i, toggle = 0;
+    for (i = 0; i < n; i++) html += '<span class="cell" style="grid-column:' + (i + 1) + '"></span>';
+    r.deals.forEach(function(d){
+      var a = yr(d.start_season); if (a == null) return;
+      var b = yr(d.end_season);
+      if (b == null) b = d.status === "Upcoming" ? a : axis.max;
+      if (b < a) b = a;
+      if (b < axis.min) return;
+      if (a < axis.min) a = axis.min;
+      var cls = d.status === "Current" ? "seg-cur" : d.status === "Upcoming" ? "seg-new" : (toggle++ % 2 ? "seg-past-b" : "seg-past-a");
+      var tip = d.sponsor + " · " + seasons(d) + " · " + (d.status === "Upcoming" ? "Announced, not yet worn" : d.status);
+      html += '<span class="seg ' + cls + (hits.has(d._id) ? " seg-hit" : "") + '" style="grid-column:' + (a - axis.min + 1) + " / " + (b - axis.min + 2) + '" title="' + esc(tip) + '"><span>' + esc(shortName(d.sponsor)) + "</span></span>";
+    });
+    return '<span class="tl" style="--n:' + n + '">' + html + "</span>";
+  }
+  function latestLine(r, axis){
+    var st = rowState(r);
+    if (st.up) {
+      var prev = st.cur || st.past;
+      return '<span class="latest">' + chip(st.up) + "<span>New for " + esc(st.up.start_season) + (prev ? ", replaces " + esc(shortName(prev.sponsor)) : "") + "</span></span>";
+    }
+    if (st.cur && st.cur.start_season === axis.last) {
+      var before = priorDeal(r, st.cur);
+      return '<span class="latest">' + chip(st.cur) + "<span>New for " + esc(st.cur.start_season) + (before ? ", replaces " + esc(shortName(before.sponsor)) : "") + "</span></span>";
+    }
+    if (st.cur) return '<span class="latest">' + chip(st.cur) + "<span>Since " + esc(st.cur.start_season) + "</span></span>";
+    if (!r.deals.length) return '<span class="latest"><span class="none">' + esc(noneLabel(r.asset)) + "</span></span>";
+    return '<span class="latest"><span class="none">No sponsor announced for ' + esc(axis.last) + "</span>" + (st.past ? "<span>Last: " + esc(shortName(st.past.sponsor)) + "</span>" : "") + "</span>";
+  }
+  function placeholderCard(d){
+    var srcs = (Array.isArray(d.sources) ? d.sources : []).map(safeUrl).filter(Boolean);
+    return '<article class="deal"><span class="patch">None found</span><div class="deal-body">' +
+      '<div class="deal-top"><h4>' + esc(noneLabel(d.asset_type)) + "</h4>" + confPill(d.confidence) + "</div>" +
+      (d.notes ? '<p class="notes">' + esc(d.notes) + "</p>" : "") +
+      (srcs.length ? '<p class="sources"><span>Checked</span>' + srcs.map(function(u){ return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(host(u)) + "</a>"; }).join("") + "</p>" : "") +
+      "</div></article>";
+  }
+  function dealCard(d){
+    var srcs = (Array.isArray(d.sources) ? d.sources : []).map(safeUrl).filter(Boolean);
+    var facts = [["Announced", fmtDate(d.announced_date)], ["Replaced", d.replaced], ["Term (reported)", d.reported_term], ["Value (reported)", d.reported_value], ["Confidence", d.confidence], ["Last verified", fmtDate(d.last_verified)]].filter(function(f){ return f[1]; });
+    return '<article class="deal">' + chip(d) +
+      '<div class="deal-body">' +
+        '<div class="deal-top"><h4>' + esc(d.sponsor) + "</h4>" + statusPill(d.status) + '<span class="deal-seasons">' + esc(seasons(d)) + "</span></div>" +
+        '<p class="deal-asset">' + esc(d.asset_type) + (d.asset_detail ? " · " + esc(d.asset_detail) : "") + "</p>" +
+        (facts.length ? '<dl class="facts">' + facts.map(function(f){ return "<div><dt>" + f[0] + "</dt><dd>" + (f[0] === "Confidence" ? confPill(f[1]) : esc(f[1])) + "</dd></div>"; }).join("") + "</dl>" : "") +
+        (d.notes ? '<p class="notes">' + esc(d.notes) + "</p>" : "") +
+        (srcs.length ? '<p class="sources"><span>Sources</span>' + srcs.map(function(u){ return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(host(u)) + "</a>"; }).join("") + "</p>" : "") +
+      "</div></article>";
+  }
+
+  function renderChanges(groups){
+    var el = $("#changes");
+    if (S.phase !== "ready" || !groups.length) { el.innerHTML = ""; return; }
+    var html = "";
+    groups.forEach(function(g){
+      var changes = [], missing = [];
+      g.rows.forEach(function(r){
+        var st = rowState(r);
+        /* Announced but not yet worn, or already worn and new this season (a league whose season has started). */
+        if (st.up) changes.push({r: r, deal: st.up, prev: st.cur || st.past});
+        else if (st.cur && st.cur.start_season === g.axis.last) changes.push({r: r, deal: st.cur, prev: priorDeal(r, st.cur)});
+        else if (!st.cur) missing.push(r);
+      });
+      if (!changes.length && !missing.length) return;
+      changes.sort(function(a, b){ return (b.deal.announced_date || "").localeCompare(a.deal.announced_date || ""); });
+      html += '<div class="callout"><div class="label">' + esc(g.league) + " · Changing for " + esc(g.axis.last) + "</div>";
+      if (changes.length) {
+        html += '<ul class="changes">' + changes.map(function(c){
+          var prev = c.prev;
+          return '<li><button type="button" class="linkish" data-jump="' + esc(c.r.key) + '">' + esc(c.r.team) + "</button><br>" +
+            (prev ? esc(shortName(prev.sponsor)) + ' <span class="arrow">→</span> ' : "") + "<b>" + esc(shortName(c.deal.sponsor)) + "</b>" +
+            (c.deal.announced_date ? ' <span class="meta">· announced ' + esc(fmtDate(c.deal.announced_date)) + "</span>" : "") + "</li>";
+        }).join("") + "</ul>";
+      }
+      if (missing.length) {
+        html += '<p class="nosponsor"><b>No sponsor announced for ' + esc(g.axis.last) + ":</b> " + missing.map(function(r){
+          return '<button type="button" class="linkish" data-jump="' + esc(r.key) + '">' + esc(r.team) + "</button>";
+        }).join(", ") + "</p>";
+      }
+      html += "</div>";
+    });
+    el.innerHTML = html;
+  }
+
+  function renderResults(){
+    var keep = rememberFocus();
+    var el = $("#results");
+    $("#legend").hidden = !(S.phase === "ready" && S.deals.size && S.view === "timeline");
+    if (S.phase === "loading") { el.innerHTML = '<div class="empty"><strong>Loading the directory…</strong>Team sponsorships will appear here in a moment.</div>'; renderChanges([]); return; }
+    if (S.phase === "error") { el.innerHTML = '<div class="empty"><strong>The directory couldn\'t load</strong>Reload the page. If it keeps happening, tell Andrew Ciampini.</div>'; renderChanges([]); return; }
+    if (!S.deals.size) { el.innerHTML = '<div class="empty"><strong>No sponsorships yet</strong>The data file has no entries. Tell Andrew Ciampini.</div>'; renderChanges([]); return; }
+
+    var groups = buildGroups(visibleDeals());
+    renderChanges(groups);
+    var html = "", shown = 0;
+
+    if (S.view === "table") {
+      var rows = [];
+      groups.forEach(function(g){ g.rows.forEach(function(r){ var h = searchHits(r); if (!h.show) return; r.deals.forEach(function(d){ if (!S.q.trim() || h.hits.has(d._id) || r.team.toLowerCase().indexOf(S.q.trim().toLowerCase()) >= 0) rows.push(d); }); }); });
+      shown = rows.length;
+      if (!rows.length) { el.innerHTML = noMatch(); restoreFocus(keep); return; }
+      html = '<div class="table-wrap"><table><thead><tr><th>Team</th><th>Sponsor</th><th>Asset</th><th>Status</th><th>Seasons</th><th>Announced</th><th>Value (reported)</th><th>Confidence</th><th>Sources</th></tr></thead><tbody>' +
+        rows.map(function(d){
+          var srcs = (Array.isArray(d.sources) ? d.sources : []).map(safeUrl).filter(Boolean);
+          return "<tr><td>" + esc(d.team) + '<div class="muted" style="font-weight:400">' + esc(d.league) + "</div></td><td>" + esc(d.sponsor) + "</td><td>" + esc(d.asset_type) + "</td><td>" + statusPill(d.status) + '</td><td class="num">' + esc(seasons(d)) + '</td><td class="num">' + esc(fmtDate(d.announced_date)) + "</td><td>" + esc(d.reported_value) + "</td><td>" + confPill(d.confidence) + "</td><td>" +
+            srcs.map(function(u){ return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(host(u)) + "</a>"; }).join("<br>") + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+      el.innerHTML = html;
+      restoreFocus(keep);
+      return;
+    }
+
+    groups.forEach(function(g){
+      var rowsHtml = "", count = 0;
+      g.rows.forEach(function(r){
+        var h = searchHits(r); if (!h.show) return;
+        count++;
+        var open = S.open.has(r.key);
+        rowsHtml += '<div class="row" id="' + rowId(r.key) + '">' +
+          '<button type="button" class="row-head" data-key="' + esc(r.key) + '" aria-expanded="' + open + '">' +
+            '<span class="team-col"><span class="team-name"><span class="caret" aria-hidden="true">›</span>' + esc(r.team) + (S.asset === "all" && r.asset && r.asset !== g.primary ? ' <span class="muted" style="font-weight:400">· ' + esc(r.asset) + "</span>" : "") + "</span>" + (r.former ? '<span class="muted" style="font-size:12px;margin-top:-4px">Formerly ' + esc(r.former) + "</span>" : "") + latestLine(r, g.axis) + "</span>" +
+            timeline(r, g.axis, h.hits) +
+          "</button>" +
+          (open ? '<div class="detail">' + (r.deals.length ? r.deals.slice().reverse().map(dealCard).join("") : r.placeholder.map(placeholderCard).join("")) + "</div>" : "") +
+        "</div>";
+      });
+      if (!count) return;
+      shown += count;
+      var teams = new Set(g.rows.map(function(r){ return r.team; })).size;
+      html += '<div class="league-head"><h2>' + esc(g.league) + "</h2><span>" + teams + " teams · " + g.rows.reduce(function(n, r){ return n + r.deals.length; }, 0) + " sponsorships · " + esc(seasonName(g.axis.min, g.axis.split)) + " to " + esc(g.axis.last) + "</span></div>" +
+        '<div class="ledger"><div class="axis" aria-hidden="true"><span class="team-col">Team · latest ' + esc(g.primary === "Jersey patch" ? "patch" : g.primary.toLowerCase()) + '</span><span class="tl" style="--n:' + g.axis.years.length + '">' +
+        g.axis.years.map(function(y, i){ return '<span style="grid-column:' + (i + 1) + '">' + esc(shortSeason(y, g.axis.split)) + "</span>"; }).join("") + "</span></div>" + rowsHtml + "</div>";
+    });
+    el.innerHTML = shown ? html : noMatch();
+    restoreFocus(keep);
+  }
+  function noMatch(){ return '<div class="empty"><strong>No teams or sponsors match "' + esc(S.q.trim()) + '"</strong>Try part of a team name (Lakers) or a sponsor (Motorola), or clear the filters.</div>'; }
+
+  function rememberFocus(){ var a = document.activeElement; return a && a.id ? {id: a.id, start: a.selectionStart, end: a.selectionEnd} : null; }
+  function restoreFocus(k){ if (!k) return; var el = document.getElementById(k.id); if (el && el !== document.activeElement) { el.focus(); try { if (k.start != null) el.setSelectionRange(k.start, k.end); } catch (e) {} } }
+
+  function refreshFilters(){
+    var leagues = new Set(), assets = new Set();
+    S.deals.forEach(function(d){ if (d.league) leagues.add(sectionOf(d)); if (d.asset_type) assets.add(d.asset_type); });
+    fill($("#league"), "All leagues", Array.from(leagues).sort(leagueSort), S.league);
+    fill($("#asset"), "All asset types", Array.from(assets).sort(), S.asset);
+    if (!leagues.has(S.league)) S.league = "all";
+    if (!assets.has(S.asset)) S.asset = "all";
+  }
+  function fill(sel, allLabel, values, current){
+    var html = '<option value="all">' + esc(allLabel) + "</option>" + values.map(function(v){ return '<option value="' + esc(v) + '"' + (v === current ? " selected" : "") + ">" + esc(v) + "</option>"; }).join("");
+    if (sel.innerHTML !== html) sel.innerHTML = html;
+  }
+
+  function renderStatus(){
+    var parts = [];
+    if (S.phase === "ready") {
+      var teams = new Set(), leagues = new Set(), real = 0;
+      S.deals.forEach(function(d){ teams.add(d.league + "|" + d.team); leagues.add(d.league); if (isReal(d)) real++; });
+      parts.push("<span><b>" + teams.size + "</b> teams</span>");
+      parts.push("<span><b>" + real + "</b> sponsorships</span>");
+      $("#foot-count").textContent = Array.from(leagues).sort(leagueSort).join(", ");
+      if (S.exportedAt) parts.push("<span>Data as of <b>" + esc(fmtTime(S.exportedAt)) + "</b></span>");
+    }
+    if (S.meta && S.meta.last_check_at) {
+      parts.push("<span>Last news check: <b>" + esc(fmtTime(S.meta.last_check_at)) + "</b>" + (S.meta.last_check_result ? " · " + esc(S.meta.last_check_result) : "") + "</span>");
+    } else if (S.phase === "ready") {
+      parts.push("<span>Daily news check hasn't run yet</span>");
+    }
+    if (S.phase === "loading") parts = ["<span>Loading…</span>"];
+    $("#status").innerHTML = parts.join("");
+  }
+
+  /* ---------- CSV ---------- */
+  var CSV_COLS = ["league","team","team_former","sport","level","asset_type","sponsor","status","start_season","end_season","announced_date","replaced","reported_term","reported_value","confidence","asset_detail","source_1","source_2","notes","last_verified"];
+  function toCsv(rows){
+    function q(v){ var s = String(v == null ? "" : v); return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+    var lines = [CSV_COLS.join(",")];
+    rows.forEach(function(d){
+      var src = Array.isArray(d.sources) ? d.sources : [];
+      lines.push(CSV_COLS.map(function(c){ return q(c === "source_1" ? src[0] : c === "source_2" ? src[1] : d[c]); }).join(","));
+    });
+    return "﻿" + lines.join("\r\n");
+  }
+  function download(){
+    var msg = $("#download-msg");
+    if (S.phase !== "ready") { msg.textContent = "The directory hasn't loaded yet."; return; }
+    var rows = visibleDeals().filter(isReal).sort(function(a, b){ return leagueSort(sectionOf(a), sectionOf(b)) || a.team.localeCompare(b.team) || byStart(a, b); });
+    var today = new Date(), stamp = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+    var url = URL.createObjectURL(new Blob([toCsv(rows)], {type: "text/csv;charset=utf-8"}));
+    var a = document.createElement("a");
+    a.href = url; a.download = "sponsorship-directory-" + stamp + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    msg.textContent = "Downloaded " + rows.length + " sponsorships.";
+  }
+
+  /* ---------- tabs & events ---------- */
+  function setTab(t){
+    S.tab = t;
+    ["directory", "about"].forEach(function(k){
+      $("#tab-" + k).setAttribute("aria-selected", String(k === t));
+      $("#panel-" + k).hidden = k !== t;
+    });
+  }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-tab]"); if (t) { setTab(t.getAttribute("data-tab")); return; }
+    var v = e.target.closest("[data-view]");
+    if (v) { S.view = v.getAttribute("data-view"); $("#view-timeline").setAttribute("aria-pressed", String(S.view === "timeline")); $("#view-table").setAttribute("aria-pressed", String(S.view === "table")); renderResults(); return; }
+    var h = e.target.closest(".row-head");
+    if (h) { var k = h.getAttribute("data-key"); if (S.open.has(k)) S.open.delete(k); else S.open.add(k); renderResults(); var b = document.querySelector('.row-head[data-key="' + CSS.escape(k) + '"]'); if (b) b.focus(); return; }
+    var j = e.target.closest("[data-jump]");
+    if (j) {
+      var key = j.getAttribute("data-jump");
+      S.open.add(key);
+      if (S.view !== "timeline") { S.view = "timeline"; $("#view-timeline").setAttribute("aria-pressed", "true"); $("#view-table").setAttribute("aria-pressed", "false"); }
+      if (S.q) { S.q = ""; $("#q").value = ""; }
+      renderResults();
+      var row = document.getElementById(rowId(key));
+      if (row) { row.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"}); var rb = row.querySelector(".row-head"); if (rb) rb.focus({preventScroll: true}); }
+      return;
+    }
+    if (e.target.closest("#download")) download();
+  });
+  document.addEventListener("input", function(e){
+    if (e.target.id === "q") { S.q = e.target.value; renderResults(); }
+  });
+  document.addEventListener("change", function(e){
+    if (e.target.id === "league") { S.league = e.target.value; renderResults(); }
+    if (e.target.id === "asset") { S.asset = e.target.value; renderResults(); }
+  });
+
+  /* ---------- start ---------- */
+  async function start(){
+    renderStatus(); renderResults();
+    if (location.hash === "#about") setTab("about");
+    try {
+      var res = await fetch(DATA_URL, {cache: "no-cache"});
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      var data = await res.json();
+      var m = new Map();
+      (Array.isArray(data.deals) ? data.deals : []).forEach(function(d){ if (!d || !d.id) return; var x = Object.assign({}, d); x._id = d.id; m.set(d.id, x); });
+      S.deals = m; S.meta = data.last_news_check || null; S.exportedAt = data.exported_at || ""; S.phase = "ready";
+    } catch (e) {
+      S.phase = "error";
+    }
+    refreshFilters(); renderStatus(); renderResults();
+  }
+  start();
+})();
+</script>
+</body>
+</html>
