@@ -254,7 +254,7 @@ td.num{font:400 12.5px var(--font-mono);font-variant-numeric:tabular-nums;white-
         <p style="margin:6px 0 0">Every entry comes from public announcements and press coverage, with links to the sources. Reported deal values and terms are the figures the cited outlet published. They are not Zoomph valuations and have not been verified, so cite the outlet if you repeat one.</p>
       </div>
       <h3>What's in it</h3>
-      <p id="about-scope">Game jersey sponsors for the NBA (from the start of its patch program in 2017-18), the NBA G League (from 2023-24) and the NHL (from the start of its patch program in 2022-23), through the current or next announced season. NHL helmet decal sponsors are listed from 2025-26 as their own section, NHL (Helmet Decal). A decal that started before 2025-26 keeps its real start season where a source gave it.</p>
+      <p id="about-scope">Game jersey sponsors for the NBA (from the start of its patch program in 2017-18), the NBA G League (from 2023-24) and the NHL (from the start of its patch program in 2022-23), through the current or next announced season. NHL helmet decal sponsors are listed from 2025-26 as their own section, NHL (Helmet Decal). A decal that started before 2025-26 keeps its real start season where a source gave it. WNBA sponsors are listed from 2009 in two sections: WNBA (Jersey Patch), the shoulder patch, and WNBA (Belly Patch), the sponsor on the front of the jersey under the number. Before about 2019 a WNBA team usually had a single front-of-jersey sponsor, often across the chest, and those are listed under Belly Patch. Older WNBA seasons have gaps where no team sponsor could be confirmed.</p>
       <p>Where a team carries two jersey sponsors at once, often different home and road patches in the NHL, the second is listed as a secondary jersey patch. A road-only helmet sponsor is listed as a secondary helmet decal. A deal that started in a season already under way shows as current and "New for" that season, rather than "Announced, not yet worn".</p>
       <p>Public coverage of G League deals is thin, so more G League entries are medium or low confidence. "No jersey sponsor found" means none could be confirmed, not that the team definitely has none.</p>
       <h3>Status</h3>
@@ -301,9 +301,9 @@ td.num{font:400 12.5px var(--font-mono);font-variant-numeric:tabular-nums;white-
   var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   function fmtDate(d){ var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ""); return m ? MON[+m[2] - 1] + " " + (+m[3]) + ", " + m[1] : (d || ""); }
   function fmtTime(iso){ if (/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return fmtDate(iso); var t = new Date(iso); if (!iso || isNaN(t)) return ""; return t.toLocaleString(undefined, {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"}); }
-  var LEAGUE_ORDER = ["NBA", "WNBA", "G League", "NHL (Jersey Patch)", "NHL (Helmet Decal)", "NHL"];
-  /* Leagues shown as one section per asset family, in the league dropdown and the ledger: "NHL (Jersey Patch)" and "NHL (Helmet Decal)". Other leagues are one section each. */
-  var SPLIT_BY_ASSET = {"NHL": true};
+  var LEAGUE_ORDER = ["NBA", "WNBA (Jersey Patch)", "WNBA (Belly Patch)", "WNBA", "G League", "NHL (Jersey Patch)", "NHL (Helmet Decal)", "NHL"];
+  /* Leagues shown as one section per asset family, in the league dropdown and the ledger: "NHL (Jersey Patch)" and "NHL (Helmet Decal)", "WNBA (Jersey Patch)" and "WNBA (Belly Patch)". Other leagues are one section each. */
+  var SPLIT_BY_ASSET = {"NHL": true, "WNBA": true};
   /* First season each section's history covers; earlier deal starts are clamped on the timeline. */
   var AXIS_MIN = {"G League": 2023, "NHL (Helmet Decal)": 2025};
   function leagueSort(a, b){ var x = LEAGUE_ORDER.indexOf(a), y = LEAGUE_ORDER.indexOf(b); if (x < 0) x = 99; if (y < 0) y = 99; return x - y || a.localeCompare(b); }
