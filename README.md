@@ -1,6 +1,6 @@
 # Team Sponsorship Directory
 
-A public Zoomph reference of team jersey and helmet sponsors (NBA, G League, NHL jersey patches and NHL helmet decals), past, present and announced, with links to the reporting behind them. Live at https://directory.zoomphstats.com/. Owner: Andrew Ciampini (Data Quality and Operations, Benchmarking).
+A public Zoomph reference of team jersey and helmet sponsors (NBA, G League, WNBA, NHL, MLS and NWSL jersey sponsors, and NHL helmet decals), past, present and announced, with links to the reporting behind them. Live at https://directory.zoomphstats.com/. Owner: Andrew Ciampini (Data Quality and Operations, Benchmarking).
 
 **Public by Nick Cronin's decision (2026-10-23).** Everything in `public/` is readable by anyone, so `public/deals.json` must only ever be the public export: the fields the page shows, with no research notes and no internal bookkeeping.
 
@@ -34,4 +34,4 @@ Don't edit `public/deals.json` by hand. Changes go through the master copy so th
 
 ## Basis
 
-Every entry comes from public announcements and press coverage. Reported deal values and terms are the cited outlet's figures, not Zoomph valuations. Confidence (High / Medium / Low) is explained on the page's "How it works" tab.
+Every entry comes from public announcements and press coverage: teams, leagues, sponsors and news outlets. Reported deal values and terms are the cited outlet's figures, not Zoomph valuations. Confidence (High / Medium / Low) is explained on the page's "How it works" tab.
