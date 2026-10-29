@@ -255,6 +255,7 @@ td.num{font:400 12.5px var(--font-mono);font-variant-numeric:tabular-nums;white-
       </div>
       <h3>What's in it</h3>
       <p id="about-scope">Game jersey sponsors for the NBA (from the start of its patch program in 2017-18), the NBA G League (from 2023-24) and the NHL (from the start of its patch program in 2022-23), through the current or next announced season. NHL helmet decal sponsors are listed from 2025-26 as their own section, NHL (Helmet Decal). A decal that started before 2025-26 keeps its real start season where a source gave it. WNBA sponsors are listed from 2009 in two sections: WNBA (Jersey Patch), the shoulder patch, and WNBA (Belly Patch), the sponsor on the front of the jersey under the number. Before about 2019 a WNBA team usually had a single front-of-jersey sponsor, often across the chest, and those are listed under Belly Patch. Older WNBA seasons have gaps where no team sponsor could be confirmed.</p>
+      <p>MLS and NWSL sponsors are listed from the 2024 season, in one section per spot on the shirt: Jersey Front (the main sponsor across the chest), Jersey Sleeve (the club's sleeve patch) and Jersey Back (above or below the number). The league-wide logo on the other sleeve (Apple TV in MLS, Ally in the NWSL) isn't listed. MLS clubs could first sell a lower-back sponsor at the 2026 All-Star break, so few have one. Where a club has two sponsors in one spot at once, such as a different front sponsor on the away kit or an upper- and a lower-back sponsor, the second is listed as secondary. An MLS or NWSL deal that began before 2024 keeps its real start season where a source gave it; otherwise it's shown from 2024.</p>
       <p>Where a team carries two jersey sponsors at once, often different home and road patches in the NHL, the second is listed as a secondary jersey patch. A road-only helmet sponsor is listed as a secondary helmet decal. A deal that started in a season already under way shows as current and "New for" that season, rather than "Announced, not yet worn".</p>
       <p>Public coverage of G League deals is thin, so more G League entries are medium or low confidence. "No jersey sponsor found" means none could be confirmed, not that the team definitely has none.</p>
       <h3>Status</h3>
@@ -270,7 +271,7 @@ td.num{font:400 12.5px var(--font-mono);font-variant-numeric:tabular-nums;white-
         <li><b>Low</b>: sources are unclear or conflict. Treat it as unconfirmed.</li>
       </ul>
       <h3>How it stays current</h3>
-      <p>Sports business news is checked every weekday for new jersey patch and helmet decal announcements, and each one is reviewed before it's added. The directory can be a day or two behind an announcement. The "Data as of" date at the top shows when it was last updated.</p>
+      <p>Sports business news is checked every weekday for new jersey sponsor and helmet decal announcements in every league listed here, and each one is reviewed before it's added. The directory can be a day or two behind an announcement. The "Data as of" date at the top shows when it was last updated.</p>
       <h3>Corrections</h3>
       <p>If something here is wrong or missing, let us know through <a href="https://zoomph.com/contact-us" target="_blank" rel="noopener noreferrer">zoomph.com/contact-us</a>, with a link to the source.</p>
     </div>
@@ -301,11 +302,11 @@ td.num{font:400 12.5px var(--font-mono);font-variant-numeric:tabular-nums;white-
   var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   function fmtDate(d){ var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ""); return m ? MON[+m[2] - 1] + " " + (+m[3]) + ", " + m[1] : (d || ""); }
   function fmtTime(iso){ if (/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return fmtDate(iso); var t = new Date(iso); if (!iso || isNaN(t)) return ""; return t.toLocaleString(undefined, {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"}); }
-  var LEAGUE_ORDER = ["NBA", "WNBA (Jersey Patch)", "WNBA (Belly Patch)", "WNBA", "G League", "NHL (Jersey Patch)", "NHL (Helmet Decal)", "NHL"];
-  /* Leagues shown as one section per asset family, in the league dropdown and the ledger: "NHL (Jersey Patch)" and "NHL (Helmet Decal)", "WNBA (Jersey Patch)" and "WNBA (Belly Patch)". Other leagues are one section each. */
-  var SPLIT_BY_ASSET = {"NHL": true, "WNBA": true};
+  var LEAGUE_ORDER = ["NBA", "WNBA (Jersey Patch)", "WNBA (Belly Patch)", "WNBA", "G League", "NHL (Jersey Patch)", "NHL (Helmet Decal)", "NHL", "MLS (Jersey Front)", "MLS (Jersey Sleeve)", "MLS (Jersey Back)", "MLS", "NWSL (Jersey Front)", "NWSL (Jersey Sleeve)", "NWSL (Jersey Back)", "NWSL"];
+  /* Leagues shown as one section per asset family, in the league dropdown and the ledger: "NHL (Jersey Patch)" and "NHL (Helmet Decal)", "WNBA (Jersey Patch)" and "WNBA (Belly Patch)", "MLS (Jersey Front)" and "MLS (Jersey Sleeve)", and so on. Other leagues are one section each. */
+  var SPLIT_BY_ASSET = {"NHL": true, "WNBA": true, "MLS": true, "NWSL": true};
   /* First season each section's history covers; earlier deal starts are clamped on the timeline. */
-  var AXIS_MIN = {"G League": 2023, "NHL (Helmet Decal)": 2025};
+  var AXIS_MIN = {"G League": 2023, "NHL (Helmet Decal)": 2025, "MLS (Jersey Front)": 2024, "MLS (Jersey Sleeve)": 2024, "MLS (Jersey Back)": 2024, "NWSL (Jersey Front)": 2024, "NWSL (Jersey Sleeve)": 2024, "NWSL (Jersey Back)": 2024};
   function leagueSort(a, b){ var x = LEAGUE_ORDER.indexOf(a), y = LEAGUE_ORDER.indexOf(b); if (x < 0) x = 99; if (y < 0) y = 99; return x - y || a.localeCompare(b); }
   /* "Secondary helmet decal" belongs with "Helmet decal", as "Secondary jersey patch" does with "Jersey patch". */
   function baseAsset(a){ return String(a || "Jersey patch").replace(/^Secondary /i, "").toLowerCase(); }
